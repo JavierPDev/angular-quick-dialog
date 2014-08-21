@@ -1,0 +1,28 @@
+{
+  "name": "angular-quick-dialog",
+  "version": "0.5.0",
+  "authors": [
+    "javier-p <jpwebdev76@gmail.com>"
+  ],
+  "description": "Quick and simple dialog module for angularjs. No dependencies other than angularjs.",
+  "keywords": [
+    "angularjs",
+    "dialog",
+    "modal",
+    "angular",
+    "js",
+    "javascript",
+    "quick",
+    "simple"
+  ],
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "node_modules",
+    "bower_components",
+  ],
+  "dependencies": {
+    "angular": "~1.2.13",
+    "angular-mocks": "~1.2.13"
+  }
+}

@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html ng-app="example">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Example</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" type="text/css" href="../src/angular-quick-dialog.css">
+        <link rel="stylesheet" type="text/css" href="./styles.css">
+    </head>
+    <body>
+        <!--[if lt IE 8]>
+            <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+        <![endif]-->
+
+        <div ng-controller="MainCtrl">
+            <div class="open-btn-group">
+                <button class="btn btn-primary btn-main" ng-click="$quickDialog.open('login')">Log in</button>
+                <button class="btn btn-primary btn-main" ng-click="$quickDialog.open('signup')">Sign up</button>
+                <input id="test-focus-input">
+            </div>
+
+           	<quick-dialog id="test-dialog-login" ng-cloak dialog-name="login" auto-focus="login-email" exit-focus="test-focus-input">
+                <form class="custom-form" action="GET" ng-submit="$event.preventDefault(); $quickDialog.close('login')">
+                    <h1>Log in</h1>
+
+                    <div class="custom-form__labels">
+                        <label for="login-email">Email:</label>
+                        <br>
+                        <label for="login-password">Password:</label>
+                    </div>
+                    <div class="custom-form__inputs">
+                        <input ng-model="auth.email" id="login-email" type="email" placeholder="Enter email address">
+                        <br>
+                        <input ng-model="auth.password" id="login-password" type="password" placeholder="Enter password">
+                    </div>
+                    <div class="btn-group">
+                        <button id="test-dialog-login-login" class="btn btn-primary" type="submit">Log in</button>
+                        <button id="test-dialog-login-cancel" class="btn btn-secondary" type="button" ng-click="auth.clear(); $quickDialog.close('login')">Cancel</button>
+                    </div>
+                </form>
+           	</quick-dialog>
+
+           	<quick-dialog id="test-dialog-signup" ng-cloak dialog-name="signup">
+                <form class="custom-form" action="GET" ng-submit="$event.preventDefault(); $quickDialog.close('signup')">
+                    <h1>Sign up</h1>
+
+                    <div class="custom-form__labels">
+                        <label for="signup-email">Email:</label>
+                        <br>
+                        <label for="signup-password">Password:</label>
+                        <br>
+                        <label for="signup-password-check">Confirm password:</label>
+                    </div>
+                    <div class="custom-form__inputs">
+                        <input ng-model="auth.email" id="signup-email" type="email" placeholder="Enter email address">
+                        <br>
+                        <input ng-model="auth.password" id="signup-password" type="password" placeholder="Enter password">
+                        <br>
+                        <input ng-model="auth.passwordCheck" id="signup-password-check" type="password" placeholder="Enter password">
+                    </div>
+                    <div class="btn-group">
+                        <button class="btn btn-primary" type="submit">Sign up</button>
+                        <button class="btn btn-secondary" type="button" ng-click="auth.clear(); $quickDialog.close('signup')">Cancel</button>
+                    </div>
+                </form>
+
+
+
+                <!-- Testing stacking dialogs -->
+                <button ng-click="$quickDialog.open('test')">Test</button>
+
+                <quick-dialog ng-cloak dialog-name="test">
+                    <form class="custom-form" action="GET" ng-submit="$event.preventDefault(); $quickDialog.close('signup')">
+                        <h1>Test</h1>
+
+                        <div class="custom-form__labels">
+                            <label for="signup-email">Email:</label>
+                        </div>
+                        <div class="custom-form__inputs">
+                            <input ng-model="auth.email" id="signup-email" type="email" placeholder="Enter email address">
+                        </div>
+
+                        
+                        <div class="btn-group">
+                            <button class="btn btn-primary" type="submit">Test</button>
+                            <button class="btn btn-secondary" type="button" ng-click="auth.clear(); $quickDialog.close('signup')">Cancel</button>
+                        </div>
+                    </form>
+                </quick-dialog>
+                <!-- Testing stacking dialogs -->
+
+
+           	</quick-dialog>
+        </div>
+
+        
+        <script src="vendor/angular/angular.js"></script>         
+        <script src="../dist/angular-quick-dialog.min.js"></script>
+        <script>
+            angular.module('example', ['angularQuickDialog'])
+               .controller('MainCtrl', function ($scope, $quickDialog) {
+                       $scope.$quickDialog = $quickDialog;
+
+                       $scope.auth = {
+                           clear: function() {
+                               this.email = '';
+                               this.password = '';
+                               this.passwordCheck = '';
+                           }
+                       };
+                       $scope.auth.clear();
+               });
+        </script>
+    </body>
+</html>
+
