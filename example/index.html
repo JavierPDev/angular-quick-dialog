@@ -43,7 +43,7 @@
            	</quick-dialog>
 
            	<quick-dialog id="test-dialog-signup" ng-cloak dialog-name="signup">
-                <form class="custom-form" action="GET" ng-submit="$event.preventDefault(); $quickDialog.close('signup')">
+                <form class="custom-form" action="GET" ng-submit="$event.preventDefault(); $quickDialog.close()">
                     <h1>Sign up</h1>
 
                     <div class="custom-form__labels">
@@ -62,7 +62,7 @@
                     </div>
                     <div class="btn-group">
                         <button class="btn btn-primary" type="submit">Sign up</button>
-                        <button class="btn btn-secondary" type="button" ng-click="auth.clear(); $quickDialog.close('signup')">Cancel</button>
+                        <button class="btn btn-secondary" type="button" ng-click="auth.clear(); $quickDialog.close()">Cancel</button>
                     </div>
                 </form>
 
@@ -72,7 +72,7 @@
                 <button ng-click="$quickDialog.open('test')">Test</button>
 
                 <quick-dialog ng-cloak dialog-name="test">
-                    <form class="custom-form" action="GET" ng-submit="$event.preventDefault(); $quickDialog.close('signup')">
+                    <form class="custom-form" action="GET" ng-submit="$event.preventDefault(); $quickDialog.close()">
                         <h1>Test</h1>
 
                         <div class="custom-form__labels">
@@ -85,7 +85,7 @@
                         
                         <div class="btn-group">
                             <button class="btn btn-primary" type="submit">Test</button>
-                            <button class="btn btn-secondary" type="button" ng-click="auth.clear(); $quickDialog.close('signup')">Cancel</button>
+                            <button class="btn btn-secondary" type="button" ng-click="auth.clear(); $quickDialog.close()">Cancel</button>
                         </div>
                     </form>
                 </quick-dialog>

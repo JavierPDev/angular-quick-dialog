@@ -4,7 +4,22 @@
 angular.module('angularQuickDialog', ['angularQuickDialog.template'])
     .factory('$quickDialog', function() {
         var dialogs = {},
-            errorMsg = 'Dialog name is incorrect, it is an invalid javascript identifier (See: https://mathiasbynens.be/notes/javascript-identifiers), or it does not exist.';
+            visibleDialogs = {
+                stack: [],
+                top: 0,
+                push: function(dialog) {
+                    this.stack[this.top++] = dialog;
+                },
+                pop: function() {
+                    return this.stack[--this.top];
+                },
+                getTop: function() {
+                    return this.stack[this.top - 1];
+                },
+                clear: function() {
+                    this.top = 0;
+                }
+            };
 
         function Dialog(name) {
             this.isVisible = false;
@@ -13,30 +28,25 @@ angular.module('angularQuickDialog', ['angularQuickDialog.template'])
 
         Dialog.prototype.open = function() {
             this.isVisible = true;
+            visibleDialogs.push(this);
         };
 
         Dialog.prototype.close = function() {
+            // Avoid duplicate removals from stack
+            if (this.isVisible) {
+                visibleDialogs.pop();
+            }
+
             this.isVisible = false;
         };
 
-        Dialog.prototype.toggle = function() {
-            this.isVisible = !this.isVisible;
-        };
-
         function open(dialogName) {
-            setState(dialogName, true);
+            dialogs[dialogName].open();
         }
 
         function close(dialogName) {
-            setState(dialogName, false);
-        }
-
-        function setState(dialogName, state) {
-            try {
-                dialogs[dialogName].isVisible = state;
-            } catch (err) {
-                throw new Error(errorMsg);
-            }
+            dialogName = dialogName || visibleDialogs.getTop().name;
+            dialogs[dialogName].close();
         }
 
         function create(dialogName) {
@@ -44,20 +54,16 @@ angular.module('angularQuickDialog', ['angularQuickDialog.template'])
             return dialogs[dialogName];
         }
 
-        function get(dialogName) {
-            try {
-                return dialogs[dialogName];
-            } catch (err) {
-                throw new Error(errorMsg);
-            }
+        function reset() {
+            dialogs = {};
+            visibleDialogs.clear();
         }
 
         return {
-            dialogs: dialogs,
             open: open,
             close: close,
             create: create,
-            get: get
+            reset: reset
         };
     })
 
@@ -67,7 +73,7 @@ angular.module('angularQuickDialog', ['angularQuickDialog.template'])
             templateUrl: 'template/quick-dialog.html', 
 			scope: {},
 			transclude: true,
-			link: function(scope, element, attrs, ctrl, transclude) {
+			link: function(scope, element, attrs) {
 				var backdropEl = angular.element(document.createElement('div')).addClass('quick-dialog__backdrop'),
                     ESC = 27,
 					body = angular.element(document.body),
@@ -83,29 +89,26 @@ angular.module('angularQuickDialog', ['angularQuickDialog.template'])
                     throw new Error('Dialog needs a name.');
                 }
                 
-                // Probably get rid of it once stack functionality works.
-                // if (scope.$parent.dialog !== undefined) {
-                //     throw new Error('Naming collision with \'dialog\' in quick-dialog directive\'s parent scope.');
-                // } else {
-                //     // Give transcluded content access to this dialog.
-                //     scope.$parent.dialog = scope.dialog;
-                // }
-
-
+                // Skip initial dirty check otherwise stack top becomes negative
+                var initialCheck = true;
                 scope.$watch('dialog.isVisible', function(isVisible) {
-                    if (isVisible) {
-                        openDialog();
-                    } else {
-                        closeDialog();
+                    if (!initialCheck) {
+                        if (isVisible) {
+                            openDialog();
+                        } else {
+                            closeDialog();
+                        }
                     }
+
+                    initialCheck = false;
                 });
 
 
                 /**
-                 * Clear cached dialogs whenever switching views
+                 * Clear cached dialogs and visiblility stack whenever switching views.
                  */
                 scope.$on('$routeChangeStart', function() {
-                    $quickDialog.dialogs = {};
+                    $quickDialog.reset();
                 });
 
 
