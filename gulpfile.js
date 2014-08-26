@@ -109,3 +109,7 @@ gulp.task('watch:test:e2e', ['test:e2e'], function() {
             console.log(e);
         });
 });
+
+gulp.task('watch:build', function() {
+    return gulp.watch('./src/angular-quick-dialog.js', ['build']);
+});
