@@ -80,7 +80,42 @@ describe('e2e:angularQuickDialog:example/test page', function () {
                 expect(dialogEl.isDisplayed()).toBe(false);
             });
         });
-    });
+    }); // End describe dialog
 
+    describe('optional focus features', function() {
+        describe('autoFocus', function() {
+            it('should be defined as an attribute of the dialog', function() {
+                expect(dialogEl.getAttribute('auto-focus')).toBeDefined();
+            });
+
+            it('should make the correct element be focused when dialog is opened', function() {
+                var input = element(by.id(dialogEl.getAttribute('auto-focus')));
+                input.click();
+                testIsFocused(input);
+            });
+        });
+
+        describe('exitFocus', function() {
+            it('should be defined as an attribute of the dialog', function() {
+                expect(dialogEl.getAttribute('exit-focus')).toBeDefined();
+            });
+
+            it('should make the correct element be focused when dialog is closed', function() {
+                var input = element(by.id(dialogEl.getAttribute('exit-focus')));
+                input.click();
+                testIsFocused(input);
+            });
+        });
+
+        /**
+         * Helper function to check if entered element has focus. 
+         *
+         * @param {Element} el
+         * @return isFocused
+         */
+        function testIsFocused(el) {
+            expect(el.getAttribute('id')).toBe(browser.driver.switchTo().activeElement().getAttribute('id'));
+        }
+    }); // End describe focus features
 });
 
