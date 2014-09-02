@@ -93,6 +93,7 @@ gulp.task('bower', ['build'], function() {
 
 	spawn('cp', ['-f', 'LICENSE', 'README.md', '../bower-angular-quick-dialog']);
 	spawn('cp', ['-f', './dist/angular-quick-dialog.min.js',  '../bower-angular-quick-dialog']);
+	spawn('cp', ['-f', './src/angular-quick-dialog.css',  '../bower-angular-quick-dialog']);
 });
 
 
