@@ -43,7 +43,7 @@ Closes a dialog based on name or if no name is provided it closes the top-most/m
 
 | Param                   | Type     | Description                             |
 |------------------------ | -------- | --------------------------------------- |
-| _(optional)_ Dialog name | *String* | Name of the dialog that will be closed. |
+| *(optional)*Dialog name | *String* | Name of the dialog that will be closed. |
 
 
 ### Directive use
@@ -56,8 +56,11 @@ Dialogs need a name.
 </quick-dialog>
 ```
 
+<<<<<<< HEAD
 _(Optional)_ Enter the id of an element that you want the focus to switch to after opening the dialog.
 *Note: Does not work in plunkr demo.*
+=======
+*(Optional)*Enter the id of an element that you want the focus to switch to after opening the dialog. *Note: Does not work in plunkr demo.*
 ```html
 <quick-dialog dialog-name="options" open-focus="options-username">
 /*
@@ -66,8 +69,11 @@ _(Optional)_ Enter the id of an element that you want the focus to switch to aft
 </quick-dialog>
 ```
 
+<<<<<<< HEAD
 Same for which element you want focus switched to when the dialog is closed.
 *Note: Does not work in plunkr demo.*
+=======
+Same for which element you want focus switched to when the dialog is closed. *Note: Does not work in plunkr demo.*
 ```html
 <quick-dialog dialog-name="options" open-focus="options-username" exit-focus="landing-name">
 /*
