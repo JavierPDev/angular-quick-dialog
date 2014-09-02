@@ -21,7 +21,7 @@
                 <input id="test-focus-input">
             </div>
 
-           	<quick-dialog id="test-dialog-login" ng-cloak dialog-name="login" auto-focus="login-email" exit-focus="test-focus-input">
+           	<quick-dialog id="test-dialog-login" ng-cloak dialog-name="login" open-focus="login-email" close-focus="test-focus-input">
                 <form class="custom-form" action="GET" ng-submit="$event.preventDefault(); $quickDialog.close('login')">
                     <h1>Log in</h1>
 

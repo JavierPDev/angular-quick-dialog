@@ -83,25 +83,25 @@ describe('e2e:angularQuickDialog:example/test page', function () {
     }); // End describe dialog
 
     describe('optional focus features', function() {
-        describe('autoFocus', function() {
+        describe('openFocus', function() {
             it('should be defined as an attribute of the dialog', function() {
-                expect(dialogEl.getAttribute('auto-focus')).toBeDefined();
+                expect(dialogEl.getAttribute('open-focus')).toBeDefined();
             });
 
             it('should make the correct element be focused when dialog is opened', function() {
-                var input = element(by.id(dialogEl.getAttribute('auto-focus')));
+                var input = element(by.id(dialogEl.getAttribute('open-focus')));
                 input.click();
                 testIsFocused(input);
             });
         });
 
-        describe('exitFocus', function() {
+        describe('closeFocus', function() {
             it('should be defined as an attribute of the dialog', function() {
-                expect(dialogEl.getAttribute('exit-focus')).toBeDefined();
+                expect(dialogEl.getAttribute('close-focus')).toBeDefined();
             });
 
             it('should make the correct element be focused when dialog is closed', function() {
-                var input = element(by.id(dialogEl.getAttribute('exit-focus')));
+                var input = element(by.id(dialogEl.getAttribute('close-focus')));
                 input.click();
                 testIsFocused(input);
             });

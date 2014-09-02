@@ -78,9 +78,9 @@ angular.module('angularQuickDialog', ['angularQuickDialog.template'])
                     ESC = 27,
 					body = angular.element(document.body),
 					windowEl = angular.element(window),
-					focusEl = document.getElementById(attrs.autoFocus) || element[0],
-					exitFocusEl = document.getElementById(attrs.exitFocus),
-					originalExitFocusEl = document.getElementById(attrs.exitFocus);
+					focusEl = document.getElementById(attrs.openFocus) || element[0],
+					closeFocusEl = document.getElementById(attrs.closeFocus),
+					originalExitFocusEl = document.getElementById(attrs.closeFocus);
 
 
                 try {
@@ -114,12 +114,12 @@ angular.module('angularQuickDialog', ['angularQuickDialog.template'])
 
 
 				function openDialog() {
-					exitFocusEl = exitFocusEl || document.activeElement;
+					closeFocusEl = closeFocusEl || document.activeElement;
 					body.append(backdropEl);
 					backdropEl.bind('click', onClick);
 					windowEl.bind('keydown', onEsc);
 
-					$timeout(function autoFocus() {
+					$timeout(function openFocus() {
 						focusEl.focus();
 					});
 				}
@@ -133,9 +133,9 @@ angular.module('angularQuickDialog', ['angularQuickDialog.template'])
 						scope.dialog.close();
 					});
 
-                    if (exitFocusEl !== null) {
-                        exitFocusEl.focus();
-                        exitFocusEl = originalExitFocusEl;
+                    if (closeFocusEl !== null) {
+                        closeFocusEl.focus();
+                        closeFocusEl = originalExitFocusEl;
                     }
 				}
 
