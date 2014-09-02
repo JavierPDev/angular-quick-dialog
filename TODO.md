@@ -1,4 +1,4 @@
 Issues
 ======
 
-*Write README.
+* Set up as bower package.
