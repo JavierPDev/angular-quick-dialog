@@ -1,5 +1,5 @@
 var gulp = require('gulp'),
-	uglify = require('gulp-uglify'),
+	uglify = require('gulp-uglifyjs'),
     jshint = require('gulp-jshint'),
     concat = require('gulp-concat'),
 	karma = require('gulp-karma'),
@@ -59,16 +59,7 @@ gulp.task('jshint', function() {
 
 
 
-gulp.task('min', function() {
-	return gulp.src(['./src/angular-quick-dialog.js'])
-		.pipe(ngAnnotate())
-		.pipe(uglify())
-		.pipe(gulp.dest('./dist'));
-});
-
-
-
-gulp.task('html2js', ['min'], function() {
+gulp.task('html2js', function() {
     return gulp.src('./template/quick-dialog.html')
         .pipe(htmlMin({collapseWhitespace: true}))
         .pipe(html2js({
@@ -80,19 +71,39 @@ gulp.task('html2js', ['min'], function() {
 });
 
 
-gulp.task('build', ['html2js'], function() {
-    return gulp.src(['./dist/quick-dialog.template.js', './dist/angular-quick-dialog.js'])
-        .pipe(concat('angular-quick-dialog.min.js'))
-        .pipe(uglify())
+
+gulp.task('concat', ['html2js'], function() {
+	return gulp.src(['./src/angular-quick-dialog.js', './dist/quick-dialog.template.js'])
+		.pipe(concat('angular-quick-dialog.js'))
+		.pipe(gulp.dest('./dist'));
+});
+
+
+
+gulp.task('ngmin', ['concat'], function() {
+    return gulp.src('./dist/angular-quick-dialog.js')
+        .pipe(ngAnnotate())
         .pipe(gulp.dest('./dist'));
 });
 
 
-gulp.task('bower', ['build'], function() {
+
+gulp.task('uglify', ['ngmin'], function() {
+    return gulp.src(['./dist/angular-quick-dialog.js'])
+		.pipe(uglify('angular-quick-dialog.min.js', {
+            outSourceMap: true
+        }))
+        .pipe(gulp.dest('./dist'));
+});
+
+
+
+gulp.task('bower', function() {
 	var spawn = require('child_process').spawn;
 
 	spawn('cp', ['-f', 'LICENSE', 'README.md', '../bower-angular-quick-dialog']);
 	spawn('cp', ['-f', './dist/angular-quick-dialog.min.js',  '../bower-angular-quick-dialog']);
+	spawn('cp', ['-f', './dist/angular-quick-dialog.min.js.map',  '../bower-angular-quick-dialog']);
 	spawn('cp', ['-f', './src/angular-quick-dialog.css',  '../bower-angular-quick-dialog']);
 });
 
@@ -112,5 +123,6 @@ gulp.task('watch:test:e2e', ['test:e2e'], function() {
 });
 
 gulp.task('watch:build', function() {
-    return gulp.watch('./src/angular-quick-dialog.js', ['build']);
+    return gulp.watch('./src/angular-quick-dialog.js', ['uglify']);
 });
+
