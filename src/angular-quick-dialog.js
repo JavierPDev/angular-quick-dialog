@@ -143,7 +143,7 @@ angular.module('angularQuickDialog', ['angularQuickDialog.template'])
                     // Listen for ESC press
 					if (event.keyCode === ESC) {
                         event.preventDefault();
-					    closeDialog();
+                        closeDialog();
 					}
 				}
 
