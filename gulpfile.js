@@ -11,6 +11,7 @@ var gulp = require('gulp'),
 
 
 gulp.task('test', ['test:unit', 'test:e2e']);
+gulp.task('build', ['uglify']);
 
 
 gulp.task('test:unit', function() {
