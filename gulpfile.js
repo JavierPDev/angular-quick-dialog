@@ -64,7 +64,7 @@ gulp.task('html2js', function() {
     return gulp.src('./template/quick-dialog.html')
         .pipe(htmlMin({collapseWhitespace: true}))
         .pipe(html2js({
-            moduleName: 'angularQuickDialog.template',
+            moduleName: 'angularQuickDialog',
             prefix: 'template/'
         }))
         .pipe(concat('quick-dialog.template.js'))
@@ -124,6 +124,6 @@ gulp.task('watch:test:e2e', ['test:e2e'], function() {
 });
 
 gulp.task('watch:build', function() {
-    return gulp.watch('./src/angular-quick-dialog.js', ['uglify']);
+    return gulp.watch('./src/angular-quick-dialog.js', ['build']);
 });
 

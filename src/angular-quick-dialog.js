@@ -1,7 +1,7 @@
 (function(window, angular, undefined) {
 'use strict';
 
-angular.module('angularQuickDialog', ['angularQuickDialog.template'])
+angular.module('angularQuickDialog', [])
     .factory('$quickDialog', function() {
         var dialogs = {},
             visibleDialogs = {
