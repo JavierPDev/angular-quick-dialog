@@ -19,7 +19,7 @@
   "private": true,
   "ignore": [
     "node_modules",
-    "bower_components",
+    "bower_components"
   ],
   "dependencies": {
     "angular": "~1.2.13",
