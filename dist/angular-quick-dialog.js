@@ -1,7 +1,7 @@
 (function(window, angular, undefined) {
 'use strict';
 
-angular.module('angularQuickDialog', ['angularQuickDialog.template'])
+angular.module('angularQuickDialog', [])
     .factory('$quickDialog', function() {
         var dialogs = {},
             visibleDialogs = {
@@ -160,9 +160,9 @@ angular.module('angularQuickDialog', ['angularQuickDialog.template'])
 
 (function(module) {
 try {
-  module = angular.module('angularQuickDialog.template');
+  module = angular.module('angularQuickDialog');
 } catch (e) {
-  module = angular.module('angularQuickDialog.template', []);
+  module = angular.module('angularQuickDialog', []);
 }
 module.run(['$templateCache', function($templateCache) {
   $templateCache.put('template/quick-dialog.html',

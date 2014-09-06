@@ -1,7 +1,8 @@
 var gulp = require('gulp'),
-	uglify = require('gulp-uglifyjs'),
+	uglify = require('gulp-uglify'),
     jshint = require('gulp-jshint'),
     concat = require('gulp-concat'),
+    sourcemaps = require('gulp-sourcemaps'),
 	karma = require('gulp-karma'),
 	ngAnnotate = require('gulp-ng-annotate'),
     htmlMin = require('gulp-htmlmin'),
@@ -91,9 +92,10 @@ gulp.task('ngmin', ['concat'], function() {
 
 gulp.task('uglify', ['ngmin'], function() {
     return gulp.src(['./dist/angular-quick-dialog.js'])
-		.pipe(uglify('angular-quick-dialog.min.js', {
-            outSourceMap: true
-        }))
+        .pipe(sourcemaps.init())
+            .pipe(concat('angular-quick-dialog.min.js'))
+            .pipe(uglify())
+        .pipe(sourcemaps.write('.'))
         .pipe(gulp.dest('./dist'));
 });
 
