@@ -1,7 +1,7 @@
 (function(window, angular, undefined) {
 'use strict';
 
-angular.module('angularQuickDialog', ['angularQuickDialog.template'])
+angular.module('angularQuickDialog', [])
     .factory('$quickDialog', function() {
         var dialogs = {},
             visibleDialogs = {
@@ -143,7 +143,7 @@ angular.module('angularQuickDialog', ['angularQuickDialog.template'])
                     // Listen for ESC press
 					if (event.keyCode === ESC) {
                         event.preventDefault();
-					    closeDialog();
+                        closeDialog();
 					}
 				}
 
