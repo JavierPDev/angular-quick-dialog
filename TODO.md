@@ -1,6 +1,4 @@
-Issues
+TODO
 ======
 
-* Set up as bower package.
 * Add screenshots to README. 
-* List filesizes.
