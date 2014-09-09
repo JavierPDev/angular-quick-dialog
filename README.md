@@ -27,7 +27,19 @@ angular.module('exampleApp', ['angularQuickDialog']);
 * Uses a directive to create dialogs that can be controlled with an injectable factory service called $quickDialog.
 * Pressing the escape key while the dialog is open will close it.
 * Clicking on the page outside of the dialog will close the dialog.
-* Clean, responsive css styling that is easily overwritten.
+* Clean, responsive css styling (using BEM syntax) that is easily overwritten.
+
+
+### Browser Support
+Angular quick dialog works in all modern browsers.  It also works in ie8 with the caveat that you use a version of angularjs before 1.3 when they drop ie8 support and you follow their [ie specific directions](https://docs.angularjs.org/guide/ie).
+
+
+### Filesize
+| Type                 | Filesize |
+| -------------------- | -------- |
+| minified             | 2.1 kB   |
+| minified and gzipped | 965 bytes|
+
 
 ### Public API
 ##### $quickDialog.open
