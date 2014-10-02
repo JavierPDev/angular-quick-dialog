@@ -16,13 +16,13 @@
 
         <div ng-controller="MainCtrl">
             <div class="open-btn-group">
-                <button class="btn btn-primary btn-main" ng-click="$quickDialog.open('login')">Log in</button>
-                <button class="btn btn-primary btn-main" ng-click="$quickDialog.open('signup')">Sign up</button>
+                <button class="btn btn-primary btn-main" ng-click="$quickDialog.open('user.login')">Log in</button>
+                <button class="btn btn-primary btn-main" ng-click="$quickDialog.open('user:signup')">Sign up</button>
                 <input id="test-focus-input">
             </div>
 
-           	<quick-dialog id="test-dialog-login" ng-cloak dialog-name="login" open-focus="login-email" close-focus="test-focus-input">
-                <form class="custom-form" action="GET" ng-submit="$event.preventDefault(); $quickDialog.close('login')">
+           	<quick-dialog id="test-dialog-login" ng-cloak dialog-name="user.login" open-focus="login-email" close-focus="test-focus-input">
+                <form class="custom-form" action="GET" ng-submit="$event.preventDefault(); $quickDialog.close('user.login')">
                     <h1>Log in</h1>
 
                     <div class="custom-form__labels">
@@ -37,12 +37,12 @@
                     </div>
                     <div class="btn-group">
                         <button id="test-dialog-login-login" class="btn btn-primary" type="submit">Log in</button>
-                        <button id="test-dialog-login-cancel" class="btn btn-secondary" type="button" ng-click="auth.clear(); $quickDialog.close('login')">Cancel</button>
+                        <button id="test-dialog-login-cancel" class="btn btn-secondary" type="button" ng-click="auth.clear(); $quickDialog.close('user.login')">Cancel</button>
                     </div>
                 </form>
            	</quick-dialog>
 
-           	<quick-dialog id="test-dialog-signup" ng-cloak dialog-name="signup">
+           	<quick-dialog should-broadcast="true" id="test-dialog-signup" ng-cloak dialog-name="user:signup">
                 <form class="custom-form" action="GET" ng-submit="$event.preventDefault(); $quickDialog.close()">
                     <h1>Sign up</h1>
 
@@ -111,6 +111,14 @@
                            }
                        };
                        $scope.auth.clear();
+
+                       $scope.$on('quickDialog.closed', function(event, dialogName) {
+                           console.log(dialogName, 'closed');
+                       });
+
+                       $scope.$on('quickDialog.opened', function(event, dialogName) {
+                           console.log(dialogName, 'opened');
+                       });
                });
         </script>
     </body>

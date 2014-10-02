@@ -2,7 +2,7 @@
 'use strict';
 
 angular.module('angularQuickDialog', [])
-    .factory('$quickDialog', function() {
+    .factory('$quickDialog', ["$rootScope", function($rootScope) {
         var dialogs = {},
             visibleDialogs = {
                 stack: [],
@@ -21,37 +21,52 @@ angular.module('angularQuickDialog', [])
                 }
             };
 
-        function Dialog(name) {
+        function Dialog(name, shouldBroadcast) {
             this.isVisible = false;
-            this.name = name;
+
+            if (!name) {
+                throw new Error('Dialog needs a name');
+            }
+
+            this.originalName = name;
+            this.name = stripInvalidChars(name);
+            this.shouldBroadcast = shouldBroadcast;
         }
 
         Dialog.prototype.open = function() {
             this.isVisible = true;
             visibleDialogs.push(this);
+
+            if (this.shouldBroadcast) {
+                $rootScope.$broadcast('quickDialog.opened', this.originalName);
+            }
         };
 
         Dialog.prototype.close = function() {
-            // Avoid duplicate removals from stack
             if (this.isVisible) {
                 visibleDialogs.pop();
             }
 
             this.isVisible = false;
+
+            if (this.shouldBroadcast) {
+                $rootScope.$broadcast('quickDialog.closed', this.originalName);
+            }
         };
 
         function open(dialogName) {
+            dialogName = stripInvalidChars(dialogName);
             dialogs[dialogName].open();
         }
 
         function close(dialogName) {
-            dialogName = dialogName || visibleDialogs.getTop().name;
+            dialogName = dialogName ? stripInvalidChars(dialogName) : visibleDialogs.getTop().name;
             dialogs[dialogName].close();
         }
 
-        function create(dialogName) {
-            dialogs[dialogName] = new Dialog(dialogName);
-            return dialogs[dialogName];
+        function create(dialogName, shouldBroadcast) {
+            dialogs[stripInvalidChars(dialogName)] = new Dialog(dialogName, shouldBroadcast);
+            return dialogs[stripInvalidChars(dialogName)];
         }
 
         function reset() {
@@ -59,13 +74,18 @@ angular.module('angularQuickDialog', [])
             visibleDialogs.clear();
         }
 
+        function stripInvalidChars(dialogName) {
+            return dialogName.replace(/\.|\:/g, '_$_');
+        }
+
+
         return {
             open: open,
             close: close,
             create: create,
             reset: reset
         };
-    })
+    }])
 
 	.directive('quickDialog', ["$timeout", "$quickDialog", function($timeout, $quickDialog) {
 		return {
@@ -83,11 +103,7 @@ angular.module('angularQuickDialog', [])
 					originalExitFocusEl = document.getElementById(attrs.closeFocus);
 
 
-                try {
-                    scope.dialog = $quickDialog.create(attrs.dialogName);
-                } catch (e) {
-                    throw new Error('Dialog needs a name.');
-                }
+                scope.dialog = $quickDialog.create(attrs.dialogName, attrs.shouldBroadcast);
                 
                 // Skip initial dirty check otherwise stack top becomes negative
                 var initialCheck = true;
@@ -104,9 +120,7 @@ angular.module('angularQuickDialog', [])
                 });
 
 
-                /**
-                 * Clear cached dialogs and visiblility stack whenever switching views.
-                 */
+                // Clear cached dialogs and visiblility stack whenever switching views.
                 scope.$on('$routeChangeStart', function() {
                     $quickDialog.reset();
                 });
@@ -129,9 +143,6 @@ angular.module('angularQuickDialog', [])
 					backdropEl.unbind('click', onClick);
 					backdropEl.remove();
 					
-					$timeout(function applyClose() {
-						scope.dialog.close();
-					});
 
                     if (closeFocusEl !== null) {
                         closeFocusEl.focus();
@@ -140,15 +151,20 @@ angular.module('angularQuickDialog', [])
 				}
 
 				function onEsc(event) {
-                    // Listen for ESC press
 					if (event.keyCode === ESC) {
                         event.preventDefault();
+                        $timeout(function() {
+                            scope.dialog.close();
+                        });
                         closeDialog();
 					}
 				}
 
                 function onClick(event) {
                     event.stopPropagation();
+					$timeout(function() {
+						scope.dialog.close();
+					});
                     closeDialog();
                 }
 
